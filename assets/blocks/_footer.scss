@@ -1,0 +1,31 @@
+/**
+BEM-formatted styles for page footers.
+*/
+
+@include critical(true) {
+  .Footer {
+    font-size: 1rem;
+    margin-top: 6rem;
+    padding: 3rem 0 2.4rem;
+  }
+
+  .Footer__container {
+    @media (min-width: 600px) {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .Footer__social {
+    @media (max-width: 600px) {
+      margin-top: 1rem;
+    }
+  }
+}
+
+@include critical(false) {
+  .Footer {
+    background: #28165d;
+  }
+}

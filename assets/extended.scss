@@ -1,0 +1,13 @@
+/**
+Non critical CSS, loaded and applied asynchronously.
+*/
+
+// Applies to the "critical" mixin,
+// configures it to output non-critical CSS
+$critical: false;
+
+// Shared base styles
+@import "base";
+
+// BEM blocks
+@import "blocks/chroma";

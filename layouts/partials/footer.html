@@ -1,0 +1,15 @@
+{{ $socialSprite := (resources.Get "images/social.svg" | resources.Fingerprint "md5" | resources.Minify).Permalink }}
+
+<footer class="Footer" role="contentinfo">
+  <div class="container Footer__container">
+    <span>
+      redoPop is Joe Bartlett,<br />
+      World Wide Web-slinger
+      &#x2601;
+    </span>
+
+    <div class="Footer__social">
+      {{ partial "social.html" . }}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,12 @@
+/**
+BEM-formatted styles for a base page.
+*/
+
+@include critical(true) {
+  .Page {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr auto;
+    min-height: 100%;
+  }
+}

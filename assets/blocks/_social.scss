@@ -1,0 +1,46 @@
+/**
+BEM-formatted styles for social links.
+*/
+
+@include critical(true) {
+  .Social {
+    display: flex;
+    @media (min-width: 600px) { margin: 0; }
+
+    svg {
+      fill: #d8d8d2;
+      width: 3rem;
+      height: 3rem;
+    }
+
+    a {
+      display: flex;
+      margin: 0 0.4rem;
+    }
+
+    a:first-child { margin-left: -0.2rem; }
+    a:last-child { margin-right: -0.2rem; }
+  }
+}
+
+@include critical(false) {
+  .Social {
+    a, svg {
+      transition: transform 0.3s;
+      will-change: transform;
+    }
+
+    a:hover {
+      transform: scale(1.6);
+      @media (prefers-reduced-motion) {
+        transform: scale(1);
+      }
+    }
+
+    a:focus svg,
+    svg:hover {
+      fill: #ff79c6;
+      transform: rotate(-12deg);
+    }
+  }
+}

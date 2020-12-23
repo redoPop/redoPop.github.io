@@ -1,0 +1,14 @@
+/**
+BEM-formatted styles for the "clouds" partial.
+*/
+
+@include critical(true) {
+  .Clouds {
+    width: 100%;
+    height: unquote("min(600px, 100%)");
+
+    position: absolute;
+    top: 0;
+    z-index: -1;
+  }
+}

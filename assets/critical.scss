@@ -1,0 +1,10 @@
+/**
+Critical CSS, goes inline in the <head> as part of the default layout.
+*/
+
+// Applies to the "critical" mixin,
+// configures it to output only critical CSS
+$critical: true;
+
+// Shared base styles
+@import "base";

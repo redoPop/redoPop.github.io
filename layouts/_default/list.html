@@ -1,0 +1,28 @@
+{{ define "head" }}
+  <title>{{ .Title }} - redoPop</title>
+{{ end }}
+
+{{ define "main" }}
+<main
+  class="container"
+  aria-labelledby="title"
+>
+  <h1 id="title">
+    {{ .Title }}
+  </h1>
+
+  {{ .Content }}
+
+  {{ range .Pages }}
+    <article class="h-entry">
+      <a href="{{.Permalink}}" class="p-name">{{.Title}}</a>
+      <time
+        class="dt-published"
+        datetime='{{ .Date.Format "2006-01-02" }}'
+      >
+        {{ .Date.Format "(Jan 2006)" | safeHTML }}
+      </time>
+    </article>
+  {{ end }}
+</main>
+{{ end }}

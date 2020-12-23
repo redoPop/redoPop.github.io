@@ -1,0 +1,25 @@
+baseURL = "https://redopop.com/"
+disableKinds = [
+  "taxonomy",
+  "taxonomyTerm",
+]
+enableRobotsTXT = true
+footnoteReturnLinkContents = "↩"
+languageCode = "en-US"
+rssLimit = 20
+pygmentsUseClasses = true
+
+[mediaTypes]
+  [mediaTypes."application/atom+xml"]
+    suffixes = ["atom"]
+
+[outputFormats]
+  [outputFormats.Atom]
+    baseName = "feed"
+    isPlainText = false
+    mediaType = "application/atom+xml"
+
+[outputs]
+  home = ["HTML", "Atom"]
+  page = ["HTML"]
+  section = ["HTML"]

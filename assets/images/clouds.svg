@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <g id="cloud">
+      <circle cx="0" cy="0" r="30" />
+      <circle cx="80" cy="-25" r="30" />
+      <circle cx="32" cy="-35" r="35" />
+      <circle cx="105" cy="0" r="30" />
+      <rect x="0" y="-10" width="105" height="40" />
+    </g>
+  </defs>
+
+  <g id="canvas"></g>
+
+  <script><![CDATA[
+    const canvas = document.getElementById('canvas');
+    const rand = max => Math.random() * max;
+
+    // Build random list of clouds
+    const clouds = [],
+          cloudFactor = Math.floor(innerWidth / 160),
+          cloudCount = Math.min(cloudFactor, 5),
+          colSize = Math.ceil(innerWidth / cloudCount);
+    for (let i = 0; i < cloudCount; i++) {
+      clouds.push({
+        x: colSize * i + rand(colSize),
+        y: 50 + rand(Math.min(innerHeight, 300)),
+        scale: rand(i / cloudCount + cloudCount / 10) + 0.5,
+      });
+    }
+
+    // Sort clouds, smallest first
+    clouds
+      .sort(({ scale: a }, { scale: b }) => {
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+      })
+      .map((cloud, index) => Object.assign(cloud, {
+        color: 70 + Math.floor(index * (50 / cloudCount)),
+      }));
+
+    function drawCloud({ x, y, scale, color }) {
+      const cloud = document.createElementNS("http://www.w3.org/2000/svg", 'use');
+      cloud.setAttribute('fill', `rgb(${Math.floor(color * 0.4)}, ${Math.floor(color * 0.3)}, ${color})`);
+      cloud.setAttribute('transform', `scale(${scale}, ${scale})`);
+      cloud.setAttribute('x', x);
+      cloud.setAttribute('y', y);
+      cloud.setAttribute('href', '#cloud');
+      canvas.appendChild(cloud);
+    }
+
+    clouds.map(drawCloud);
+  ]]></script>
+</svg>

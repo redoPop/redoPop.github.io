@@ -1,0 +1,39 @@
+/**
+BEM-formatted styles for page headers.
+*/
+
+@include critical(true) {
+  .Header {
+    margin: 2rem auto 3rem;
+  }
+
+  .Header__home,
+  .Header__home:visited {
+    color: #ccced0;
+    border-bottom: 3px solid #00b4ff;
+    padding-bottom: 0.6rem;
+    text-decoration: none;
+  }
+
+  .Header__pop {
+    color: #00b4ff;
+  }
+}
+
+@include critical(false) {
+  .Header__home,
+  .Header__pop {
+    transition:
+      color 0.3s,
+      border-color 0.4s;
+  }
+
+  .Header__home:hover {
+    color: #ff4bda;
+    border-color: #ff4bda;
+  }
+
+  .Header__home:hover .Header__pop {
+    color: #faf500;
+  }
+}

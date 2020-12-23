@@ -1,0 +1,35 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>" | safeHTML }}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>redoPop</title>
+  <subtitle>Latest posts by Joe Bartlett, World Wide Web-slinger.</subtitle>
+  {{ if not .Date.IsZero }}
+    <updated>{{ .Date.Format "2006-01-02T15:04:05-0700" | safeHTML }}</updated>
+  {{ end }}
+  <id>{{ .Permalink }}</id>
+  <link rel="self" type="application/atom+xml" href="{{ "/feed.atom" | absURL }}" />
+  {{ with .Site.Author }}
+    <author>
+      {{ with .name }}
+        <name>{{.}}</name>
+      {{ end }}
+    </author>
+  {{ end }}
+
+  {{- $pages := where .Site.Pages "Params.feed" true -}}
+  {{- $limit := .Site.Config.Services.RSS.Limit -}}
+  {{- if ge $limit 1 -}}
+    {{- $pages = $pages | first $limit -}}
+  {{- end -}}
+  {{ range $pages }}
+    {{ if not .Date.IsZero }}
+      <entry>
+        <title>{{ .Title }}</title>
+        <link rel="alternate" type="text/html" href="{{ .Permalink }}" />
+        <id>{{ .Permalink }}</id>
+        <updated>{{ .Lastmod.Format "2006-01-02T15:04:05-0700" | safeHTML }}</updated>
+        <published>{{ .Date.Format "2006-01-02T15:04:05-0700" | safeHTML }}</published>
+        <content type="html">{{ printf "<![CDATA[%s]]>" .Content | safeHTML }}</content>
+      </entry>
+    {{ end }}
+  {{ end }}
+</feed>

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+printf "\033[0;32mDeploying to GitHub Pages...\033[0m\n"
+
+hugo --minify
+
+cd public
+
+git add .
+
+msg="Rebuilding site"
+if [ -n "$*" ]; then
+  msg="$*"
+fi
+git commit -m "$msg"
+
+git push origin public

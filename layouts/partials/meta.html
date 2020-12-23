@@ -1,0 +1,50 @@
+<div
+  style="
+    display:flex;
+    align-items:center;
+    margin:1.2rem 0 4rem;
+  "
+>
+  <img
+    src='{{ (resources.Get "images/poppet.svg" | resources.Fingerprint "md5" | resources.Minify).Permalink }}'
+    role="img"
+    width="48" height="48"
+    style="margin-right:0.8rem"
+    title="Author photo"
+  />
+
+  <div
+    style="font-size:1rem"
+  >
+    <div
+      class="p-author"
+      itemprop="author"
+    >
+      Joe Bartlett
+      <span style="opacity:0.8">(he/him, they/them)</span>
+    </div>
+
+    <div style="color:#bd93f9">
+      <time
+        class="dt-published"
+        datetime='{{ .Date.Format "2006-01-02" }}'
+        itemprop="datePublished"
+        title="Published"
+      >
+        {{ .Date.Format "Jan 2, 2006" }}
+      </time>
+
+      {{ if .Lastmod.After .Date }}
+        &bull;
+        Updated
+        <time
+          class="dt-updated"
+          datetime='{{ .Date.Format "2006-01-02" }}'
+          title="Updated"
+        >
+          {{ .Lastmod.Format "Jan 2, 2006" }}
+        </time>
+      {{ end }}
+    </div>
+  </div>
+</div>

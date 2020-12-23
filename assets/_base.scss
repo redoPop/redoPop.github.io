@@ -1,0 +1,18 @@
+/**
+Imports required by both critical and extended CSS.
+*/
+
+// Mixins must be loaded first
+@import "lib/mixins";
+
+// Non-BEM CSS
+@import "lib/tags";
+@import "lib/utils";
+
+// BEM blocks
+@import "blocks/clouds";
+@import "blocks/footer";
+@import "blocks/header";
+@import "blocks/heading";
+@import "blocks/page";
+@import "blocks/social";

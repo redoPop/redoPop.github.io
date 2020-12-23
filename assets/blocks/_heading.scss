@@ -1,0 +1,25 @@
+/**
+BEM-formatted styles for headings.
+*/
+
+@include critical(true) {
+  .Heading__link {
+    text-decoration: none;
+  }
+
+  @media (min-width: 46rem) {
+    .Heading {
+      display: flex;
+      align-items: flex-start;
+      margin-left: -2rem;
+    }
+
+    .Heading__link {
+      order: -1;
+      flex: none;
+      text-align: center;
+      width: 2rem;
+      height: auto;
+    }
+  }
+}

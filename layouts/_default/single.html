@@ -1,0 +1,58 @@
+{{ define "head" }}
+  <title>{{ .Title }} - redoPop</title>
+  <meta name=description            content="{{ .Summary }}">
+
+  {{/* Twitter */}}
+  <meta name="twitter:card"         content="summary" />
+  <meta name="twitter:site"         content="@redoPop">
+  <meta name="twitter:creator"      content="@redoPop" />
+  <meta name="twitter:title"        content="{{ .Title }}" />
+  <meta name="twitter:image"        content='{{ "cloud-1024.png" | absURL }}' />
+
+  {{/* Facebook */}}
+  <meta property="og:type"          content="article" />
+  <meta property="og:url"           content="{{ .Permalink }}">
+  <meta property="og:site_name"     content="redoPop" />
+  <meta property="og:title"         content="{{ .Title }}" />
+  <meta property="og:image"         content='{{ "cloud-1024.png" | absURL }}' />
+{{ end }}
+
+{{ define "main" }}
+  <main
+    class="h-entry"
+    itemscope itemtype="http://schema.org/Article"
+    aria-labelledby="title"
+  >
+    <div class="container">
+      <header>
+        <h1
+          class="p-name"
+          itemprop="name"
+          id="title"
+        >
+          {{ .Title }}
+        </h1>
+
+        {{ partial "meta.html" . }}
+      </header>
+
+      <div
+        class="e-content"
+        itemprop="articleBody"
+      >
+        {{ .Content }}
+      </div>
+
+      <p
+        style="margin-top:3rem;"
+      >
+        <span
+          style="border-top: 3px solid #9c79ff; padding-top:0.6rem;"
+        >
+          Questions/corrections?
+          <a href="mailto:joe@redopop.com">Reach out!</a>
+        </span>
+      </p>
+    </div>
+  </main>
+{{ end }}

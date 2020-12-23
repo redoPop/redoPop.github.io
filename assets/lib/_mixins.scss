@@ -1,0 +1,15 @@
+/**
+Sass mixins
+*/
+
+/**
+Used to signal criticality in BEM blocks and other partials:
+critical(true) { ... } around blocks of critical CSS
+critical(false) { ... } around extended (non-critical) styles
+*/
+@mixin critical($this: false) {
+  @if ($critical == true and $this == true) or
+      ($critical == false and $this == false) {
+    @content;
+  }
+}

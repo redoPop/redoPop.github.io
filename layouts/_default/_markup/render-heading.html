@@ -1,0 +1,4 @@
+<h{{ .Level }} id="{{ .Anchor | safeURL }}" class="Heading">
+  {{ .Text | safeHTML }}
+  <a href="#{{ .Anchor | safeURL }}" class="Heading__link" aria-hidden="true">#</a>
+</h{{ .Level }}>
