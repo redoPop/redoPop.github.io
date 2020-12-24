@@ -27,7 +27,7 @@ Styles that are applied via tag selectors
     color: #ff79c6;
   }
 
-  *:focus {
+  *:focus-visible {
     outline: 3px solid #50fa7b;
     outline-offset: 0.4ex;
   }
