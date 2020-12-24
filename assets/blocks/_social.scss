@@ -40,6 +40,9 @@ BEM-formatted styles for social links.
     a:focus svg,
     svg:hover {
       fill: #ff79c6;
+    }
+
+    svg:hover {
       transform: rotate(-12deg);
     }
   }
