@@ -41,7 +41,7 @@ $critical: false;
     -webkit-box-decoration-break: clone;
   }
 
-  a:focus-visible,
+  a:focus,
   a:hover {
     background-color: #ff79c6;
   }
