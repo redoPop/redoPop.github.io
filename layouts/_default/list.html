@@ -14,8 +14,11 @@
   {{ .Content }}
 
   {{ range .Pages }}
-    <article class="h-entry">
-      <a href="{{.Permalink}}" class="p-name">{{.Title}}</a>
+    <article class="Article h-entry">
+      <a
+        href="{{.Permalink}}"
+        class="Article__title p-name"
+      >{{.Title}}</a>
       <time
         class="dt-published"
         datetime='{{ .Date.Format "2006-01-02" }}'

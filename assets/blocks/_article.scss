@@ -1,0 +1,21 @@
+/**
+BEM-formatted styles for a listed article.
+*/
+
+@include critical(true) {
+  .Article:not(:last-child) {
+    border-bottom: 3px solid #28165d;
+    padding-bottom: 1rem;
+    margin: 1rem 0;
+  }
+
+  .Article__title {
+    font-size: 1.3rem;
+    line-height: 1.4;
+    text-decoration: none;
+
+    @media (min-width: 30rem) {
+      font-size: 1.6rem;
+    }
+  }
+}
