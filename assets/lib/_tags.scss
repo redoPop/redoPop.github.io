@@ -20,6 +20,7 @@ Styles that are applied via tag selectors
       sans-serif;
     font-size: 1.12rem;
     margin: 0;
+    -webkit-margin-bottom-collapse: separate;
   }
 
   a,
