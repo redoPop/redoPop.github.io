@@ -48,11 +48,14 @@ Styles that are applied via tag selectors
       monospace;
     font-size: 1em;
     line-height: 1.3;
-    padding: 20px 0;
+    padding: 1px 0.4ex;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   pre {
     overflow: auto;
+    padding: 20px inherit;
   }
 
   h1,
@@ -69,7 +72,7 @@ Styles that are applied via tag selectors
     font-size: 2.2rem;
   }
 
-  :is(dl, ol, p, pre, ul) {
+  :is(dl, hr, ol, p, pre, ul) {
     margin: 1.6rem 0;
 
     :is(h2, h3, h4, h5, h6) + & {
@@ -103,5 +106,12 @@ Styles that are applied via tag selectors
   }
   a:hover {
     color: #ff5555;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    background-color: #151a30;
   }
 }
