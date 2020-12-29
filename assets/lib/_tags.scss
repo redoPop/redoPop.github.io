@@ -84,6 +84,13 @@ Styles that are applied via tag selectors
     }
   }
 
+  hr {
+    background-color: #9c79ff;
+    border: none;
+    height: 3px;
+    margin-top: 3rem;
+  }
+
   @media (min-width: 42rem) {
     body { font-size: 1.2rem; }
     h1 { font-size: 2.6rem; }
