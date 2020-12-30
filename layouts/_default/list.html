@@ -20,7 +20,7 @@
         class="Article__title p-name"
       >{{.Title}}</a>
       <time
-        class="dt-published"
+        class="Article__date dt-published"
         datetime='{{ .Date.Format "2006-01-02" }}'
       >
         {{ .Date.Format "(Jan 2006)" | safeHTML }}

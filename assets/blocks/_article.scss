@@ -18,4 +18,8 @@ BEM-formatted styles for a listed article.
       font-size: 1.6rem;
     }
   }
+
+  .Article__date {
+    white-space: nowrap;
+  }
 }
