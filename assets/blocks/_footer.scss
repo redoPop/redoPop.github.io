@@ -26,6 +26,6 @@ BEM-formatted styles for page footers.
 
 @include critical(false) {
   .Footer {
-    background: #28165d;
+    background: var(--rich-purple);
   }
 }

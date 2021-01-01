@@ -8,7 +8,7 @@ BEM-formatted styles for social links.
     @media (min-width: 600px) { margin: 0; }
 
     svg {
-      fill: #d8d8d2;
+      fill: var(--off-gray);
       width: 3rem;
       height: 3rem;
     }
@@ -39,7 +39,7 @@ BEM-formatted styles for social links.
 
     a:focus svg,
     svg:hover {
-      fill: #ff79c6;
+      fill: var(--pink);
     }
 
     svg:hover {

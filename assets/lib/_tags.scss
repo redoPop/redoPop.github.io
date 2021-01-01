@@ -10,7 +10,7 @@ Styles that are applied via tag selectors
 
   body {
     background: #000b16;
-    color: #d8d8d2;
+    color: var(--off-gray);
     font-family:
       -apple-system,
       BlinkMacSystemFont,
@@ -25,11 +25,11 @@ Styles that are applied via tag selectors
 
   a,
   a:visited {
-    color: #ff79c6;
+    color: var(--pink);
   }
 
   *:focus-visible {
-    outline: 3px solid #50fa7b;
+    outline: 3px solid var(--popful-green);
     outline-offset: 0.4ex;
   }
 
@@ -85,7 +85,7 @@ Styles that are applied via tag selectors
   }
 
   hr {
-    background-color: #9c79ff;
+    background-color: var(--light-violet);
     border: none;
     height: 3px;
     margin-top: 3rem;
@@ -109,16 +109,16 @@ Styles that are applied via tag selectors
     background-color: transparent;
   }
   a:visited {
-    color: #bd93f9;
+    color: var(--soft-violet);
   }
   a:hover {
-    color: #ff5555;
+    color: var(--red);
   }
 
   code,
   kbd,
   pre,
   samp {
-    background-color: #151a30;
+    background-color: var(--darker-blue);
   }
 }

@@ -90,7 +90,7 @@ https://gohugo.io/content-management/syntax-highlighting/
 /* TextWhitespace */ .chroma .w {  }
 
 .chroma {
-  background-color: #151a30;
+  background-color: var(--darker-blue);
   padding: 20px;
   margin-left: -20px;
   margin-right: -20px;

@@ -5,6 +5,7 @@ The homepage has a unique look.
 // Import critical CSS
 $critical: true;
 @import "lib/mixins";
+@import "lib/colors";
 @import "lib/tags";
 @import "lib/utils";
 @import "blocks/social";
@@ -19,7 +20,7 @@ $critical: false;
 }
 
 .Home-title__pop {
-  color: #00b4ff;
+  color: var(--popful-blue);
 }
 
 .Home-title__job::before,
@@ -43,7 +44,7 @@ $critical: false;
 
   a:focus,
   a:hover {
-    background-color: #ff79c6;
+    background-color: var(--pink);
   }
 
   ul {

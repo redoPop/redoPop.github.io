@@ -1,0 +1,20 @@
+/**
+Custom properties for colors
+*/
+
+@include critical(true) {
+  :root {
+    --popful-blue: #00b4ff;
+    --darker-blue: #151a30;
+    --rich-purple: #28165d;
+    --popful-green: #50fa7b;
+    --light-violet: #9c79ff;
+    --soft-violet: #bd93f9;
+    --gray-blue: #ccced0;
+    --off-gray: #d8d8d2;
+    --yellow: #faf500;
+    --magenta: #ff4bda;
+    --red: #ff5555;
+    --pink: #ff79c6;
+  }
+}

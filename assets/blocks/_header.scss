@@ -9,14 +9,14 @@ BEM-formatted styles for page headers.
 
   .Header__home,
   .Header__home:visited {
-    color: #ccced0;
-    border-bottom: 3px solid #00b4ff;
+    color: var(--gray-blue);
+    border-bottom: 3px solid var(--popful-blue);
     padding-bottom: 0.6rem;
     text-decoration: none;
   }
 
   .Header__pop {
-    color: #00b4ff;
+    color: var(--popful-blue);
   }
 }
 
@@ -29,11 +29,11 @@ BEM-formatted styles for page headers.
   }
 
   .Header__home:hover {
-    color: #ff4bda;
-    border-color: #ff4bda;
+    color: var(--magenta);
+    border-color: var(--magenta);
   }
 
   .Header__home:hover .Header__pop {
-    color: #faf500;
+    color: var(--yellow);
   }
 }

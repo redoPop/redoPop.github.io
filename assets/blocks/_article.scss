@@ -4,7 +4,7 @@ BEM-formatted styles for a listed article.
 
 @include critical(true) {
   .Article:not(:last-child) {
-    border-bottom: 3px solid #28165d;
+    border-bottom: 3px solid var(--rich-purple);
     padding-bottom: 1rem;
     margin: 1rem 0;
   }
