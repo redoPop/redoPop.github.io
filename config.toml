@@ -9,6 +9,11 @@ languageCode = "en-US"
 rssLimit = 20
 pygmentsUseClasses = true
 
+[author]
+  name = "Joe Bartlett"
+  email = "joe@redopop.com"
+  uri = "https://redopop.com/"
+
 [mediaTypes]
   [mediaTypes."application/atom+xml"]
     suffixes = ["atom"]
