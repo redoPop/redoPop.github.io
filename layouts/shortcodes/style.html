@@ -1,0 +1,3 @@
+{{ $css := ($.Page.Resources.GetMatch (.Get 0) | resources.ToCSS | resources.Minify) }}
+
+<style>{{ $css.Content | safeCSS }}</style>

@@ -1,0 +1,11 @@
+<script
+  type="module"
+  defer
+>
+  {{ range $key, $value := $.Params }}
+    {{ $script := ($.Page.Resources.GetMatch $value | resources.Fingerprint "md5" | resources.Minify) }}
+    {{ printf `import %s from "%s";` $key $script.Permalink | safeJS }}
+  {{ end }}
+
+  {{ .Inner | safeJS }}
+</script>
