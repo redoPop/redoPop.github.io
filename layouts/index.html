@@ -24,34 +24,24 @@
   </div>
 
   <h1 class="container Home-title">
-    redo<span class="Home-title__pop">Pop</span>
-    is
-    <span itemprop="givenName">Joe</span>
-    <span itemprop="familyName">Bartlett</span>,
-    <span class="Home-title__job" itemprop="jobTitle" title="Web &amp; Video Developer">
-      World Wide Web-slinger
-    </span>
+    redo<span class="Home-title__pop" role="presentation">Pop</span>
   </h1>
 
   <div class="container Home-copy">
     <p>
-      I&rsquo;m Joe Bartlett, a front-end developer in Minnesota.
-      &#x1f44b;
+      Hi! &#x1f44b;
+      I&rsquo;m
+      <span itemprop="givenName">Joe</span>
+      <span itemprop="familyName">Bartlett</span>, a
+      <span itemprop="jobTitle" title="Senior Software Engineer">software &amp; video dev</span>
+      in Minnesota.
     </p>
 
-    <p>
-      I care deeply about performance, usability,
-      and inclusiveness on the web.
-      I&nbsp;also do a lot with video:
-      our small team at
-      <a href="https://www.ted.com" itemprop="worksFor" rel="external"><span>TED</span></a>
-      works on everything from ingest &amp; production tools
-      to streaming &amp; building our own web players.
-    </p>
+    <p>I build a lot for the web &ndash; especially in the front end &ndash; but I&rsquo;ve also worked on desktop, mobile, and OTT apps.</p>
 
     {{- $pages := where .Site.Pages "Params.feed" true | first 3 -}}
     {{ if $pages }}
-      <p>Sometimes <a href="/posts"><span>I write.</span></a> Most recently:</p>
+      <p>Sometimes <a href="/posts"><span>I write</span></a> &ndash; most recently:</p>
       <ul aria-label="Posts">
         {{ range $pages }}
           <li class="h-entry">
@@ -61,7 +51,7 @@
               datetime='{{ .Date.Format "2006-01-02" }}'
               aria-hidden="true"
             >
-              {{ .Date.Format "(Jan 2006)" | safeHTML }}
+              {{ .Date.Format "(Jan&nbsp;2006)" | safeHTML }}
             </time>
           </li>
         {{ end }}
@@ -72,7 +62,7 @@
       Reach me
       <a href="mailto:{{ .Site.Author.email }}" itemprop="email"><span>by email</span></a>
       or
-      <a href="https://twitter.com/redoPop" rel="me external"><span>Twitter</span></a>
+      <a href="https://toot.cafe/@redoPop" rel="me external"><span>Mastodon</span></a>
     </p>
   </div>
 

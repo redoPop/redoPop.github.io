@@ -16,14 +16,13 @@ $critical: false;
 
 .Home-title {
   font-weight: normal;
-  margin: 2.4rem auto 2.2rem;
+  margin: 2.4rem auto 1.6rem;
 }
 
 .Home-title__pop {
   color: var(--popful-blue);
 }
 
-.Home-title__job::before,
 .Home-title__pop::after {
   content: '';
   display: block;

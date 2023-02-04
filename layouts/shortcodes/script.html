@@ -1,7 +1,7 @@
 {{ $script := ($.Page.Resources.GetMatch (.Get 0) | resources.Fingerprint "md5" | resources.Minify) }}
 
 {{ if eq (.Get 1) "inline" }}
-  <script>{{ $script.Content | safeJS }}</script>
+  <script defer>{{ $script.Content | safeJS }}</script>
 {{ else }}
-  {{ printf `<script src="%s"></script>` $script.Permalink | safeHTML }}
+  {{ printf `<script defer src="%s"></script>` $script.Permalink | safeHTML }}
 {{ end }}
