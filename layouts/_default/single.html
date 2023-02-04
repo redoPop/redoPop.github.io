@@ -1,6 +1,6 @@
 {{ define "head" }}
   <title>{{ .Title }} - redoPop</title>
-  <meta name=description            content="{{ .Summary }}">
+  <meta name=description            content="{{ cond (gt (len .Description) 0) .Description .Summary }}">
 
   {{/* Twitter */}}
   <meta name="twitter:card"         content="summary" />
