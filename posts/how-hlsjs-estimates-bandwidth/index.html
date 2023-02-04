@@ -1,0 +1,181 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=alternate type=application/atom+xml title=redoPop href=https://redopop.com/feed.atom><link rel=apple-touch-icon-precomposed href=/apple-touch-icon.png><link rel=mask-icon href=/mask-icon.svg color=#3296f0><title>How hls.js estimates bandwidth - redoPop</title><meta name=description content="This post describes how hls.js estimates bandwidth for adaptive bitrate streaming. My goal is to shine a little light on ABR configs."><meta name=twitter:card content="summary"><meta name=twitter:site content="@redoPop"><meta name=twitter:creator content="@redoPop"><meta name=twitter:title content="How hls.js estimates bandwidth"><meta name=twitter:image content="https://redopop.com/cloud-1024.png"><meta property="og:type" content="article"><meta property="og:url" content="https://redopop.com/posts/how-hlsjs-estimates-bandwidth/"><meta property="og:site_name" content="redoPop"><meta property="og:title" content="How hls.js estimates bandwidth"><meta property="og:image" content="https://redopop.com/cloud-1024.png"><style>:root{--popful-blue:#00b4ff;--darker-blue:#151a30;--rich-purple:#28165d;--popful-green:#50fa7b;--light-violet:#9c79ff;--soft-violet:#bd93f9;--gray-blue:#ccced0;--off-gray:#d8d8d2;--yellow:#faf500;--magenta:#ff4bda;--red:#ff5555;--pink:#ff79c6}html{height:100%;line-height:1.5}body{background:#000b16;color:var(--off-gray);font-family:-apple-system,BlinkMacSystemFont,segoe ui,Roboto,Arial,sans-serif;font-size:1.12rem;margin:0;-webkit-margin-bottom-collapse:separate}a,a:visited{color:var(--pink)}*:focus-visible{outline:3px solid var(--popful-green);outline-offset:.4ex}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:andale mono wt,andale mono,monospace;font-size:1em;line-height:1.3;padding:1px .4ex;box-decoration-break:clone;-webkit-box-decoration-break:clone}pre{overflow:auto}h1,h2,h3,h4,h5,h6{margin:1rem 0;line-height:1.3}h1{font-size:2.2rem}:is(dl,hr,ol,p,pre,ul){margin:1.6rem 0}:is(h2,h3,h4,h5,h6)+:is(dl,hr,ol,p,pre,ul){margin-top:0}:is(dl,hr,ol,p,pre,ul)+:is(h2,h3,h4,h5,h6){margin-top:3rem}hr{background-color:var(--light-violet);border:none;height:3px;margin-top:3rem}figure{margin:0}figcaption{font-size:80%;opacity:.7;padding:0 2rem;font-style:italic}@media(min-width:42rem){body{font-size:1.2rem}h1{font-size:2.6rem}}.container{max-width:42rem;margin:0 auto;padding:0 20px}.Article:not(:last-child){border-bottom:3px solid var(--rich-purple);padding-bottom:1rem;margin:1rem 0}.Article__title{font-size:1.3rem;line-height:1.4;text-decoration:none}@media(min-width:30rem){.Article__title{font-size:1.6rem}}.Article__date{white-space:nowrap}.chroma{padding:20px;margin-left:-20px;margin-right:-20px}.Clouds{width:100%;height:min(600px,100%);position:absolute;top:0;z-index:-1}.Footer{font-size:1rem;margin-top:6rem;padding:3rem 0 2.4rem}@media(min-width:600px){.Footer__container{display:flex;justify-content:space-between;align-items:center}}@media(max-width:600px){.Footer__social{margin-top:1rem}}.Header{margin:2rem auto 3rem}.Header__home,.Header__home:visited{color:var(--gray-blue);border-bottom:3px solid var(--popful-blue);padding-bottom:.6rem;text-decoration:none}.Header__pop{color:var(--popful-blue)}.Heading__link{text-decoration:none}@media(min-width:46rem){.Heading{display:flex;align-items:flex-start;margin-left:-2rem}.Heading__link{order:-1;flex:none;text-align:center;width:2rem;height:auto}}.Page{display:grid;grid-template-columns:100%;grid-template-rows:1fr auto;min-height:100%}.Social{display:flex}@media(min-width:600px){.Social{margin:0}}.Social svg{fill:var(--off-gray);width:3rem;height:3rem}.Social a{display:flex;margin:0 .4rem}.Social a:first-child{margin-left:-.2rem}.Social a:last-child{margin-right:-.2rem}</style><link rel=stylesheet href=https://redopop.com/extended.927476d60bb24d52519d8c0e48566317940eb5ad653e27e91c6cf289d7ccd9fa.css media=print onload='this.onload=null,this.media="all"'><noscript><link rel=stylesheet href=https://redopop.com/extended.927476d60bb24d52519d8c0e48566317940eb5ad653e27e91c6cf289d7ccd9fa.css></noscript></head><body class=Page><div><object aria-hidden=true tabindex=-1 type=image/svg+xml data=https://redopop.com/images/clouds.f62d85c12b6c3206e9724b2b53e0a2c1.min.svg class=Clouds></object><header class="container Header" role=banner><a href=https://redopop.com/ rel=home class=Header__home aria-label=Home>redo<span class=Header__pop role=presentation>Pop</span></a></header><main class=h-entry itemscope itemtype=http://schema.org/Article aria-labelledby=title><div class=container><header><h1 class=p-name itemprop=name id=title>How hls.js estimates bandwidth</h1><div style="display:flex;align-items:center;margin:1.2rem 0 4rem"><img src=https://redopop.com/images/poppet.32e87bf425aa5ea053381bcbd98105aa.min.svg role=img width=48 height=48 style=margin-right:.8rem title="Author photo"><div style=font-size:1rem><div class=p-author itemprop=author>Joe Bartlett
+<span style=opacity:.8>(he/him, they/them)</span></div><div style=color:var(--soft-violet)><time class=dt-published datetime=2021-04-23 itemprop=datePublished title=Published>Apr 23, 2021</time></div></div></div></header><div class=e-content itemprop=articleBody><p><style>.Range{-webkit-appearance:none;background:0 0}.Range:focus{outline:none}.Range::-webkit-slider-runnable-track{width:100%;height:10px;cursor:pointer;background:#614182;border-radius:5px}.Range::-moz-range-track{width:100%;height:10px;cursor:pointer;background:#614182;border-radius:5px}.Range::-webkit-slider-thumb{height:20px;width:20px;border:none;border-radius:10px;background:var(--pink);cursor:pointer;-webkit-appearance:none;margin-top:-5px}.Range::-moz-range-thumb{height:20px;width:20px;border:none;border-radius:10px;background:var(--pink);cursor:pointer;-webkit-appearance:none}.Range:focus-visible::-webkit-slider-thumb{outline:3px solid var(--popful-green);outline-offset:4px}.Range:focus-visible::-moz-range-thumb{outline:3px solid var(--popful-green);outline-offset:4px}.Hlsjs-est-chart{width:100%;height:0;padding-bottom:56.25%;position:relative}.Hlsjs-est-chart [role=tooltip]{display:grid;grid-column-gap:.8ex;grid-template-columns:auto auto;background:rgba(255,255,255,.1);font-size:.8rem;opacity:0;padding:.4rem;transition:opacity .3s;position:absolute;top:.8rem;right:.8rem;min-width:10rem}.Hlsjs-est-chart [role=tooltip] b{text-align:right}.Hlsjs-est-chart:hover [role=tooltip]{opacity:1}.Hlsjs-est-form{display:grid;font-size:80%;grid-template-columns:30% 60%;grid-gap:.8ex;margin:1ex 0}.Hlsjs-est-form>*{padding:0 .4ex}.Hlsjs-est-form__label{text-align:right}.Hlsjs-est-form__input{display:flex;align-items:center}.Hlsjs-est-form__range{margin:0 1ex 0 -.4ex;width:50%}.Hlsjs-est-vars text{fill:#fff;font-family:-apple-system,BlinkMacSystemFont,segoe ui,Roboto,Arial,sans-serif;cursor:default}.Hlsjs-est-vars__text{font-size:42px}.Hlsjs-est-vars__time{font-size:28px;font-weight:300;opacity:.7}.Hlsjs-est-vars__var{opacity:.2;transition:opacity .2s}.Hlsjs-est-vars__var--active{opacity:.9}</style><script defer src=https://cdnjs.cloudflare.com/ajax/libs/d3/6.5.0/d3.min.js integrity="sha512-0XfwGD1nxplHpehcSVI7lY+m/5L37PNHDt+DOc7aLFckwPXjnjeA1oeNbru7YeI4VLs9i+ADnnHEhP69C9CqTA==" crossorigin=anonymous></script></p><p>This post describes how <a href=https://github.com/video-dev/hls.js/ rel=external>hls.js</a> estimates bandwidth for adaptive bitrate streaming. My goal is to shine a little light on <abbr title="adaptive bitrate">ABR</abbr>
+configs.</p><p>An <abbr title="HTTP Live Streaming">HLS</abbr>
+stream provides variants of the same video at higher and lower qualities. The variants are sliced into short video segments, each just a few seconds long:</p><figure class=Hlsjs-est-vars><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 515" aria-hidden="true"><defs><filter id="med" x="0" y="0"><feFlood x="1" y="1" height="1" width="1"/><feComposite width="6" height="6"/><feTile result="a"/><feComposite in="SourceGraphic" in2="a" operator="in"/><feMorphology operator="dilate" radius="4"/></filter><filter id="low" x="0" y="0"><feFlood x="4" y="4" height="2" width="2"/><feComposite width="14" height="14"/><feTile result="a"/><feComposite in="SourceGraphic" in2="a" operator="in"/><feMorphology operator="dilate" radius="8"/></filter><clipPath id="clip-box" clipPathUnits="objectBoundingBox"><rect x="0" y="0" width="1" height="1"/></clipPath><g id="frame"><image width="256" height="144" clip-path="url(#clip-box)"/></g></defs><g id="canvas"><g transform="translate(0, 50)" class="Hlsjs-est-vars__var Hlsjs-est-vars__var--active"><text class="Hlsjs-est-vars__text" dominant-baseline="middle" text-anchor="end" y="72" x="190">high:</text></g><g transform="translate(0, 204)" class="Hlsjs-est-vars__var" data-filter="med"><text class="Hlsjs-est-vars__text" dominant-baseline="middle" text-anchor="end" y="72" x="190">med:</text></g><g transform="translate(0, 358)" class="Hlsjs-est-vars__var" data-filter="low"><text class="Hlsjs-est-vars__text" dominant-baseline="middle" text-anchor="end" y="72" x="190">low:</text></g></g><text class="Hlsjs-est-vars__time" text-anchor="start" y="35" x="220">Time:</text><text class="Hlsjs-est-vars__time" text-anchor="end" y="35" x="470">0:10</text><text class="Hlsjs-est-vars__time" text-anchor="end" y="35" x="735">0:20</text><text class="Hlsjs-est-vars__time" text-anchor="end" y="35" x="1e3">0:30</text><text class="Hlsjs-est-vars__time" text-anchor="end" y="35" x="1265">0:40</text><text class="Hlsjs-est-vars__time" text-anchor="end" y="35" x="1526">0:50</text><script>const cns = tag => document.createElementNS("http://www.w3.org/2000/svg", tag);
+const canvas = document.getElementById('canvas');
+const frameModel = document.getElementById('frame');
+function addFrame(parent, url, origin, filter) {
+const frame = frameModel.cloneNode(true);
+frame.setAttribute('transform', `translate(${origin})`);
+const image = frame.querySelector('image');
+image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', url);
+if (filter) image.setAttribute('filter', `url(#${filter})`)
+parent.appendChild(frame);
+}
+const variants = canvas.querySelectorAll('g.Hlsjs-est-vars__var');
+function setActive(variant) {
+const base = 'Hlsjs-est-vars__var';
+for (g of variants) {
+g.setAttribute('class', `${base} ${g === variant ? `${base}--active` : ''}`);
+}
+}
+for (const g of variants) {
+g.addEventListener('pointerenter', () => setActive(g));
+const filter = g.getAttribute('data-filter');
+for (let i = 1; i &lt; 6; i += 1) {
+addFrame(g, `./${i}.webp`, `${i * 265 - 50},0`, filter);
+}
+}</script></svg><figcaption>Representation of an HLS resource illustrating video segments for three variants: high, med, and low.</figcaption></figure><p>As the player downloads new video segments, it uses their download times to estimate bandwidth. That information helps it decide whether to switch to a higher or lower quality variant for the next segments it downloads. Put that process on loop and you have ABR: adaptive bitrate streaming.</p><h2 id=the-problem class=Heading>The problem
+<a href=#the-problem class=Heading__link aria-hidden=true>#</a></h2><p>Calculating throughput for a single download is simple: number of bits / number of seconds = bits per second. But how well does an overall average describe the connection at any given point in time during a video stream?</p><p>Think of a car traveling at different speeds on a trip: its average speed over the trip may be 60mph, but some of that&rsquo;s spent on highways, some on residential roads, some waiting at intersections. Internet download speeds fluctuate like this too, so streaming video players need to adapt quickly to give viewers the best playback quality their connection can support without stalling.</p><p>Each segment in an HLS stream is a single download, so hls.js uses each one to sample the viewer&rsquo;s throughput. Below is a scatter plot showing some of these samples – one for each segment that was downloaded during a short hls.js playback session. I&rsquo;ve also plotted a simple rolling average through them:</p><p><figure id=fig-1 class=Hlsjs-est-chart aria-label="Chart showing per-segment bandwidth estimates with a rolling average"></figure><script type=module defer>
+  
+    
+    import Chart from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/chart.99552a0248a0b511e5d841d5d767b6a5.min.js";
+  
+    
+    import data from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/data.a7e18b505ba30e24a65e78566be43147.min.js";
+  
+    
+    import { makeMa } from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/utils.ea15d2f99462895dbcb6c40a996a9fbd.min.js";
+  
+
+  
+  const fig = new Chart('#fig-1', data);
+  const ma = makeMa();
+  fig.addDots();
+  fig.addLine({
+    title: 'Rolling Avg',
+    color: '#8bfdd8',
+    f: ([bits, secs]) => ma(bits / secs)
+  });
+  fig.addKey();
+
+</script></p><p>I used a browser-simulated mobile connection, so it&rsquo;s fairly stable, but you can see a few dramatic shifts. Some are temporary extremes, and if the player responded to them immediately then it would be switching variants too often.</p><p>But notice how flat the rolling average remains throughout all fluctuations. As a view session goes on, that regression effect becomes stronger. If the player relied on an overall average to decide when to switch variant then it would take too long to react to changes in network conditions.</p><p>We need another way to average this data, one that gives more weight to recent samples so the player can be more responsive to changes without going overboard.</p><h2 id=exponentially-weighted-moving-average class=Heading>Exponentially Weighted Moving Average
+<a href=#exponentially-weighted-moving-average class=Heading__link aria-hidden=true>#</a></h2><p>Hls.js addresses this problem with an <em>Exponentially Weighted Moving Average</em> (EWMA). The gist of this solution is that samples are given a <em>half life</em> as we collect them, so each sample&rsquo;s impact on the overall average lessens as more data is collected. This makes bandwidth estimates more responsive to changes.</p><p>Here&rsquo;s the same sample data with an EWMA added:</p><p><figure id=fig-2 class=Hlsjs-est-chart aria-label="Chart showing per-segment bandwidth estimates with a standard rolling average and an exponentially weighted moving average"></figure><script type=module defer>
+  
+    
+    import Chart from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/chart.99552a0248a0b511e5d841d5d767b6a5.min.js";
+  
+    
+    import data from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/data.a7e18b505ba30e24a65e78566be43147.min.js";
+  
+    
+    import { makeMa, makeEwma } from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/utils.ea15d2f99462895dbcb6c40a996a9fbd.min.js";
+  
+
+  
+  const fig = new Chart('#fig-2', data);
+  const ma = makeMa();
+  const ewma = makeEwma();
+  fig.addDots();
+  fig.addLine({
+    title: 'Rolling Avg',
+    color: '#8bfdd8',
+    f: ([bits, secs]) => ma(bits / secs)
+  });
+  fig.addLine({
+    title: 'EWMA',
+    color: '#ff5555',
+    f: ([bits, secs]) => ewma(0.5, bits / secs)
+  });
+  fig.addKey();
+
+</script></p><p>The exact value of the half life – the rate of decay for our samples – is an important variable in the EWMA formula, and it&rsquo;s one we can tune to affect the player&rsquo;s responsiveness to changing download speeds.</p><p>Another important variable is the passage of time. In the chart above, it&rsquo;s assumed that samples are taken at regular non-specific intervals. But what if playback is interrupted? What about varying segment lengths? Ideally, samples would decay according to their age.</p><h2 id=adjusted-ewma class=Heading>Adjusted EWMA
+<a href=#adjusted-ewma class=Heading__link aria-hidden=true>#</a></h2><p>To address this, hls.js uses an adjusted weight parameter, <em>alpha,</em> for each sample. First, it generates a base alpha according to the configured half life. Then, for each sample it takes, it uses the timestamp as an exponent to amplify that base alpha.</p><p>Here&rsquo;s an interactive chart demonstrating how the half life affects both the base alpha and bandwidth estimates with the time adjustment in place:</p><p><form id=fig-3-adjust class=Hlsjs-est-form><label class=Hlsjs-est-form__label>Half life:</label>
+<span class=Hlsjs-est-form__input><input id=fig-3-hlife class="Range Hlsjs-est-form__range" type=range min=0 max=100 value=25>
+<span id=fig-3-hlife-val></span></span>
+<label class=Hlsjs-est-form__label>Base &#945;:</label>
+<span id=fig-3-alpha class=Hlsjs-est-form__input></span></form><figure id=fig-3 class=Hlsjs-est-chart aria-label="Chart showing per-segment bandwidth estimates with a dynamically adjusted exponentially weighted moving average"></figure><script type=module defer>
+  
+    
+    import Chart from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/chart.99552a0248a0b511e5d841d5d767b6a5.min.js";
+  
+    
+    import data from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/data.a7e18b505ba30e24a65e78566be43147.min.js";
+  
+    
+    import { baseAlpha, makeAdjEwma } from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/utils.ea15d2f99462895dbcb6c40a996a9fbd.min.js";
+  
+
+  
+  let line;
+  const $ = id => document.getElementById(id)
+  const hlInp = $('fig-3-hlife');
+  const hlVal = $('fig-3-hlife-val');
+  const aVal = $('fig-3-alpha');
+  const getHl = () => 100 * (1 - Math.sin(Math.acos(Number(hlInp.value) / 100)));
+  const makeF = ewma => ([bits, secs]) => ewma(secs, bits / secs);
+  const fig = new Chart('#fig-3', data);
+  fig.addDots();
+  function redraw() {
+    const hl = getHl();
+    hlVal.innerText = `(${Math.round(hl * 100) / 100})`;
+    const a = baseAlpha(hl);
+    aVal.style.backgroundImage = `linear-gradient(90deg, #393a59 ${a * 100}%, transparent ${a * 100}%)`;
+    aVal.innerText = Math.round(a * 100) / 100;
+    const f = makeF(makeAdjEwma(a));
+    if (line) fig.redrawLine({ ...line, f });
+    else line = fig.addLine({ title: 'AEWMA', color: '#ff5555', f });
+  }
+  hlInp.addEventListener('input', redraw);
+  redraw();
+
+</script></p><p>Notice that a higher alpha slows down the EWMA&rsquo;s responsiveness: it makes the peaks and valleys in the line less extreme.</p><h2 id=fast-and-slow-ewma class=Heading>Fast and Slow EWMA
+<a href=#fast-and-slow-ewma class=Heading__link aria-hidden=true>#</a></h2><p>It pays to be somewhat pessimistic about network conditions: we should be cautious when new samples suggest that bandwidth is suddenly better, but much more responsive when it seems to be getting worse. In other words, our estimates would ideally combine the qualities of both a higher and lower alpha.</p><p>For that reason, hls.js tracks <em>two</em> exponential weighted moving averages:</p><ul><li><em>Fast</em> – default half life of 3.0</li><li><em>Slow</em> – default half life of 9.0</li></ul><p><figure id=fig-4 class=Hlsjs-est-chart aria-label="Chart showing per-segment bandwidth estimates with both Fast and Slow exponentially weighted moving averages"></figure><script type=module defer>
+  
+    
+    import Chart from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/chart.99552a0248a0b511e5d841d5d767b6a5.min.js";
+  
+    
+    import data from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/data.a7e18b505ba30e24a65e78566be43147.min.js";
+  
+    
+    import { baseAlpha, makeAdjEwma } from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/utils.ea15d2f99462895dbcb6c40a996a9fbd.min.js";
+  
+
+  
+  const fig = new Chart('#fig-4', data);
+  const slow = makeAdjEwma(baseAlpha(9));
+  const fast = makeAdjEwma(baseAlpha(3));
+  fig.addDots();
+  fig.addLine({
+    title: 'Slow',
+    color: '#8be9fd',
+    f: ([bits, secs]) => slow(secs, bits / secs),
+  });
+  fig.addLine({
+    title: 'Fast',
+    color: '#ff5555',
+    f: ([bits, secs]) => fast(secs, bits / secs),
+  });
+  fig.addKey();
+
+</script></p><p>Notice how their two lines overlap: the fast line is more responsive, so it has higher peaks and lower valleys; the slow line is less responsive, so it remains flatter overall.</p><p>As it takes new samples, hls.js uses the lower of these two outputs as its bandwidth estimate to guide ABR decisions. This gives a final bandwidth estimate that drops quickly and climbs slowly:</p><p><figure id=fig-5 class=Hlsjs-est-chart aria-label="Chart showing per-segment bandwidth estimates with final hls.js bandwidth estimates"></figure><script type=module defer>
+  
+    
+    import Chart from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/chart.99552a0248a0b511e5d841d5d767b6a5.min.js";
+  
+    
+    import data from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/data.a7e18b505ba30e24a65e78566be43147.min.js";
+  
+    
+    import { baseAlpha, makeAdjEwma } from "https://redopop.com/posts/how-hlsjs-estimates-bandwidth/utils.ea15d2f99462895dbcb6c40a996a9fbd.min.js";
+  
+
+  
+  const fig = new Chart('#fig-5', data);
+  const fast = makeAdjEwma(baseAlpha(3));
+  const slow = makeAdjEwma(baseAlpha(9));
+  fig.addDots();
+  fig.addLine({
+    title: 'min(Fast, Slow)',
+    color: '#8bfdd8',
+    f: ([bits, secs]) => Math.min(
+      fast(secs, bits / secs),
+      slow(secs, bits / secs)
+    ),
+  });
+  fig.addKey();
+
+</script></p><p>This is exactly what we wanted: an estimate that responds quickly to negative network conditions but is more cautious about interpreting positive extremes.</p><h2 id=sensible-defaults class=Heading>Sensible defaults
+<a href=#sensible-defaults class=Heading__link aria-hidden=true>#</a></h2><p>The final value that&rsquo;s important in hls.js EWMA configurations is the <em>default bandwidth estimate.</em> At the start of playback, hls.js doesn&rsquo;t have any segment samples to make intelligent EWMA estimates, so it uses the default estimate to guide ABR until enough samples have been gathered.</p><p>Hopefully you can now recognize the configuration options for hls.js bandwidth estimates:</p><ul><li><a href=https://github.com/video-dev/hls.js/blob/v1.0.2/docs/API.md#abrewmafastvod rel=external><code>abrEwmaFastVoD</code></a> sets the &ldquo;fast&rdquo; half life for VOD playback</li><li><a href=https://github.com/video-dev/hls.js/blob/v1.0.2/docs/API.md#abrewmafastlive rel=external><code>abrEwmaFastLive</code></a> sets the &ldquo;fast&rdquo; half life for live event streams</li><li><a href=https://github.com/video-dev/hls.js/blob/v1.0.2/docs/API.md#abrewmaslowvod rel=external><code>abrEwmaSlowVoD</code></a> sets the &ldquo;slow&rdquo; half life for VOD</li><li><a href=https://github.com/video-dev/hls.js/blob/v1.0.2/docs/API.md#abrewmaslowlive rel=external><code>abrEwmaSlowLive</code></a> sets the &ldquo;slow&rdquo; half life for live</li><li><a href=https://github.com/video-dev/hls.js/blob/v1.0.2/docs/API.md#abrewmadefaultestimate rel=external><code>abrEwmaDefaultEstimate</code></a> is the bandwidth value that hls.js uses until it&rsquo;s gathered enough samples to make estimates</li></ul><p>It&rsquo;s rare that you&rsquo;ll want to tinker with the half life configurations, but they can be helpful when tuning ABR for specific network profiles.</p><p>The default estimate is a more common configuration. If you have a lot of repeat views then a useful technique is to capture the viewer&rsquo;s last bandwidth estimate in web storage and apply it as the default estimate for the next stream, so the viewer can start at a level that better matches their network capabilities.</p></div><p style=margin-top:3rem><span style="border-top:3px solid var(--light-violet);padding-top:.6rem">Questions/corrections?
+<a href=mailto:joe@redopop.com>Reach out!</a></span></p></div></main></div><footer class=Footer role=contentinfo><div class="container Footer__container"><span>redoPop is Joe Bartlett,<br>World Wide Web-slinger</span><div class=Footer__social><div class=Social><a href=https://github.com/redoPop rel="me external" title="redoPop on GitHub"><svg viewBox="0 0 100 100" aria-hidden="true"><use xlink:href="https://redopop.com/images/social.5e198b406e711257de140d305f7606ca.min.svg#github"/></svg></a><a href=https://pinboard.in/u:redoPop rel="me external" title="redoPop on Pinboard"><svg viewBox="0 0 100 100" aria-hidden="true"><use xlink:href="https://redopop.com/images/social.5e198b406e711257de140d305f7606ca.min.svg#pinboard"/></svg></a><a href=https://toot.cafe/@redoPop rel="me external" title="redoPop on Mastodon"><svg viewBox="0 0 100 100" aria-hidden="true"><use xlink:href="https://redopop.com/images/social.5e198b406e711257de140d305f7606ca.min.svg#mastodon"/></svg></a></div></div></div></footer></body></html>

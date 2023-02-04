@@ -3,7 +3,7 @@
   <title>redoPop (Joe Bartlett)</title>
   <subtitle>Latest posts by Joe Bartlett, World Wide Web-slinger.</subtitle>
   
-    <updated>2020-11-03T20:11:00-06:00</updated>
+    <updated>2021-04-23T18:16:00-06:00</updated>
   
   <id>https://redopop.com/</id>
   <link rel="self" type="application/atom+xml" href="https://redopop.com/feed.atom" />
@@ -16,12 +16,29 @@
   
     
       <entry>
+        <title>How hls.js estimates bandwidth</title>
+        <link rel="alternate" type="text/html" href="https://redopop.com/posts/how-hlsjs-estimates-bandwidth/" />
+        <id>https://redopop.com/posts/how-hlsjs-estimates-bandwidth/</id>
+        <updated>2021-04-23T18:16:00-06:00</updated>
+        <published>2021-04-23T18:16:00-06:00</published>
+        
+          <content type="text">This post describes how hls.js estimates bandwidth for adaptive bitrate streaming. My goal is to shine a little light on ABR configs.
+
+This entry has some media or interactive features that don't display well in this feed, so I'm cutting things short here: please follow the entry link to read it in full.
+</content>
+        
+      </entry>
+    
+  
+    
+      <entry>
         <title>Notes from Demuxed 2020</title>
         <link rel="alternate" type="text/html" href="https://redopop.com/posts/demuxed-2020/" />
         <id>https://redopop.com/posts/demuxed-2020/</id>
         <updated>2020-12-18T17:24:00-06:00</updated>
         <published>2020-11-03T20:11:00-06:00</published>
-        <content type="html"><![CDATA[<p>Last week was <a href="https://demuxed.com/" rel="external">Demuxed</a>, a conference about digital video from an engineering perspective. It was my third time attending and it&rsquo;s still an exhilarating conference: every speaker brings unique perspectives and expertise; I can never predict which talks will impress me most.</p>
+        
+          <content type="html"><![CDATA[<p>Last week was <a href="https://demuxed.com/" rel="external">Demuxed</a>, a conference about digital video from an engineering perspective. It was my third time attending and it&rsquo;s still an exhilarating conference: every speaker brings unique perspectives and expertise; I can never predict which talks will impress me most.</p>
 <p><a href="https://www.youtube.com/playlist?list=PLkyaYNWEKcOcDlGjEbpxBe4woCJGHrarN" rel="external">The full conference is now available for viewing on YouTube</a> but here are a few talks/topics that stood out to me as especially interesting:</p>
 <h2 id="how-webrtc-works-sean-dubois-amazon" class="Heading">
   How WebRTC works (Sean DuBois, Amazon)
@@ -64,6 +81,7 @@
 </ul>
 <p>If you&rsquo;re interested in video or just want a new perspective on engineering problems, I can&rsquo;t recommend this conference enough.</p>
 ]]></content>
+        
       </entry>
     
   
@@ -74,23 +92,25 @@
         <id>https://redopop.com/posts/ico-packer/</id>
         <updated>2020-09-13T17:32:00-05:00</updated>
         <published>2020-09-13T17:32:00-05:00</published>
-        <content type="html"><![CDATA[<p>ICO remains a popular format for favicons. Historically images within an ICO were bitmaps, but the format has long supported PNG too. Since it makes for smaller filesizes, I figured ImageMagick would make a PNG-based ICO if fed only PNG sources:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">convert 16x16.png 32x32.png 48x48.png favicon.ico
-</code></pre></div><p>Output size: <strong>15 KB</strong> 🙀 – almost 8× my sources. <a href="https://www.kodlian.com/apps/icon-slate" rel="external">Icon Slate</a> yields similar: 18 KB. Both tools are bundling bitmaps into the ICO rather than the source PNGs.</p>
+        
+          <content type="html"><![CDATA[<p>ICO remains a popular format for favicons. Historically images within an ICO were bitmaps, but the format has long supported PNG too. Since it makes for smaller filesizes, I figured ImageMagick would make a PNG-based ICO if fed only PNG sources:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">convert 16x16.png 32x32.png 48x48.png favicon.ico
+</span></span></code></pre></div><p>Output size: <strong>15 KB</strong> 🙀 – almost 8× my sources. <a href="https://www.kodlian.com/apps/icon-slate" rel="external">Icon Slate</a> yields similar: 18 KB. Both tools are bundling bitmaps into the ICO rather than the source PNGs.</p>
 <p>I thrashed around looking for an open source lib or tool that reliably packages an ICO of PNG images but my luck was bad enough I began to wonder if I&rsquo;d made up the whole thing about ICO serving as a PNG container.</p>
 <p>I hadn’t, but I reflexively turned to Wikipedia <a href="https://en.wikipedia.org/wiki/ICO_%5c%28file_format%5c%29#Outline" rel="external">where the ICO format is so well documented</a> (and the format itself so straightforward) that I decided to write <a href="https://github.com/redoPop/ico-packer" rel="external">a small Node library dedicated to the task of packaging PNG images into an ICO</a>. Here&rsquo;s how I use it:</p>
-<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
-<span class="kr">const</span> <span class="nx">pack</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ico-packer&#39;</span><span class="p">);</span>
-
-<span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s1">&#39;favicon.ico&#39;</span><span class="p">,</span> <span class="nx">pack</span><span class="p">([</span>
-  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;16x16.png&#39;</span><span class="p">),</span>
-  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;32x32.png&#39;</span><span class="p">),</span>
-  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;48x48.png&#39;</span><span class="p">),</span>
-<span class="p">]));</span>
-</code></pre></div><p>Output size: <strong>2 KB</strong> 😽</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">pack</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ico-packer&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="s1">&#39;favicon.ico&#39;</span><span class="p">,</span> <span class="nx">pack</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;16x16.png&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;32x32.png&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;48x48.png&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]));</span>
+</span></span></code></pre></div><p>Output size: <strong>2 KB</strong> 😽</p>
 <p>This isn&rsquo;t a new trick – <a href="https://devblogs.microsoft.com/oldnewthing/20101022-00/?p=12473" rel="external">it&rsquo;s baked into the format</a> and several &ldquo;favicon generator&rdquo; websites have been doing it for years – but if anyone else has the same trouble finding a working tool then hopefully this strikes the right keywords to help you out. ❤️</p>
 <p><a href="https://www.npmjs.com/package/ico-packer" rel="external">ico-packer is available on npm</a>.</p>
 ]]></content>
+        
       </entry>
     
   
@@ -101,12 +121,14 @@
         <id>https://redopop.com/posts/typescript-for-jsdoc/</id>
         <updated>2020-07-20T20:19:26-05:00</updated>
         <published>2020-07-20T20:19:26-05:00</published>
-        <content type="html"><![CDATA[<p>The TypeScript compiler can <a href="https://www.typescriptlang.org/docs/handbook/declaration-files/dts-from-js.html" rel="external">generate type declarations from JSDoc comments in JavaScript sources</a>. I&rsquo;ve been using it to provide TypeScript support for Node libraries that are still maintained as pure JavaScript.</p>
+        
+          <content type="html"><![CDATA[<p>The TypeScript compiler can <a href="https://www.typescriptlang.org/docs/handbook/declaration-files/dts-from-js.html" rel="external">generate type declarations from JSDoc comments in JavaScript sources</a>. I&rsquo;ve been using it to provide TypeScript support for Node libraries that are still maintained as pure JavaScript.</p>
 <p>While TypeScript has quickly taken over front-end library development, many Node libraries are still maintained as pure JS. That&rsquo;s partly due to differences in lifecycles and codebase maturity, but there&rsquo;s also a technical reason for the difference: in the front-end TypeScript is largely replacing an existing transpile step, so it&rsquo;s a natural evolution of longstanding development toolchains. Since Node codebases don&rsquo;t contend with browser support, they have no natural need for such a transpile step. That makes transpilation – and its associated inconveniences to testing and debugging – a new friction when adopting TypeScript in Node. (This is one of <a href="https://deno.land/" rel="external">Deno&rsquo;s</a> draws: TypeScript support by default means less tooling to argue with.)</p>
 <p>Regardless, type declaration files are a common feature request for Node libraries. The compiler&rsquo;s JSDoc support seems a good solution: it allows library contributors to work in pure JS, toolchains untampered, with only a <code>publish</code> script in <code>package.json</code> to generate <code>.d.ts</code> files for distribution:</p>
-<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="s2">&#34;publish&#34;</span><span class="err">:</span> <span class="s2">&#34;tsc --allowJs --declaration --emitDeclarationOnly --outDir .&#34;</span><span class="err">,</span>
-</code></pre></div><p>That satisfies consumers' expectations for type support without disrupting development, adding only a short automatic step to distribution and a single shallow dependency for <a href="https://www.npmjs.com/package/typescript" rel="external"><code>typescript</code></a> itself.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="s2">&#34;publish&#34;</span><span class="err">:</span> <span class="s2">&#34;tsc --allowJs --declaration --emitDeclarationOnly --outDir .&#34;</span><span class="err">,</span>
+</span></span></code></pre></div><p>That satisfies consumers&rsquo; expectations for type support without disrupting development, adding only a short automatic step to distribution and a single shallow dependency for <a href="https://www.npmjs.com/package/typescript" rel="external"><code>typescript</code></a> itself.</p>
 ]]></content>
+        
       </entry>
     
   
@@ -117,7 +139,8 @@
         <id>https://redopop.com/posts/webdav-file-server/</id>
         <updated>2020-02-22T16:44:10-06:00</updated>
         <published>2020-02-22T16:44:10-06:00</published>
-        <content type="html"><![CDATA[<p>Our team maintains a FUSE daemon which brings media files together from multiple storage systems and organizes them into directories based on metadata so editors can find them quickly. FUSE is <a href="https://developer.apple.com/support/kernel-extensions/" rel="external">facing a daunting future on macOS,</a> so we&rsquo;ve been keeping an eye out for alternatives.</p>
+        
+          <content type="html"><![CDATA[<p>Our team maintains a FUSE daemon which brings media files together from multiple storage systems and organizes them into directories based on metadata so editors can find them quickly. FUSE is <a href="https://developer.apple.com/support/kernel-extensions/" rel="external">facing a daunting future on macOS,</a> so we&rsquo;ve been keeping an eye out for alternatives.</p>
 <p>One of my wackier ideas was to build a virtual file server sharing the same tree structure over a protocol that enjoys direct macOS support: SMB, or less seriously: FTP or WebDAV. I&rsquo;ve been tinkering in my free time to probe the viability of that idea.</p>
 <p>Perhaps I&rsquo;ll share the more serious research into CIFS &amp; SMB2 some other time. Before I knuckled down to that, I spent some time distracted by WebDAV. It&rsquo;s an infamously quirky protocol, but it&rsquo;s also a piece of web tech I&rsquo;d never paid much mind to. I had a surprising amount of fun playing with it.</p>
 <h2 id="a-toy-webdav-server" class="Heading">
@@ -126,75 +149,75 @@
 </h2><p>WebDAV uses HTTP to deliver file contents and XML payloads representing file &amp; folder properties. It also extends HTTP with a handful of special verbs like <code>PROPFIND</code> which obtains the properties of a resource (whereas <code>GET</code> obtains the resource itself).</p>
 <p>When a <code>PROPFIND</code> request is made to a directory (<em>a collection</em> in WebDAV parlance), the server doesn&rsquo;t just respond with the directory&rsquo;s properties but with the properties of its members too. This is represented as a multi-status response, as though <code>PROPFIND</code> requests had been made to each of those resources individually and their responses were being stitched together into one XML document.</p>
 <p>To demonstrate that, here&rsquo;s a toy implementation written in Express – a read-only WebDAV server that lists a single text file member of a root collection:</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&#34;express&#34;</span><span class="p">);</span>
-<span class="kr">const</span> <span class="nx">xml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&#34;xmlbuilder&#34;</span><span class="p">);</span>
-
-<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
-
-<span class="c1">// Describes a mock file for our toy server
-</span><span class="c1"></span><span class="kr">const</span> <span class="nx">file</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">path</span><span class="o">:</span> <span class="s2">&#34;/hello-world.txt&#34;</span><span class="p">,</span>
-  <span class="nx">content</span><span class="o">:</span> <span class="s2">&#34;Hello World&#34;</span><span class="p">,</span>
-  <span class="nx">ctime</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-<span class="p">};</span>
-
-<span class="c1">// Serve the file itself (standard get request)
-</span><span class="c1"></span><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">content</span><span class="p">));</span>
-
-<span class="c1">// Obtain properties for the root resource,
-</span><span class="c1">// which is a collection containing our file
-</span><span class="c1"></span><span class="nx">app</span><span class="p">.</span><span class="nx">propfind</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&#34;Content-Type&#34;</span><span class="p">,</span> <span class="s2">&#34;application/xml&#34;</span><span class="p">);</span>
-
-  <span class="c1">// Begin a multistatus XML document to represent
-</span><span class="c1"></span>  <span class="c1">// PROPFIND responses from multiple resources
-</span><span class="c1"></span>  <span class="kr">const</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">xml</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&#34;D:multistatus&#34;</span><span class="p">).</span><span class="nx">att</span><span class="p">(</span><span class="s2">&#34;xmlns:D&#34;</span><span class="p">,</span> <span class="s2">&#34;DAV:&#34;</span><span class="p">);</span>
-
-  <span class="c1">// Helper method for adding new a response to the doc
-</span><span class="c1"></span>  <span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="p">=&gt;</span>
-    <span class="nx">doc</span><span class="p">.</span><span class="nx">ele</span><span class="p">({</span>
-      <span class="s2">&#34;D:response&#34;</span><span class="o">:</span> <span class="p">{</span>
-        <span class="s2">&#34;D:href&#34;</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&#34;#text&#34;</span><span class="o">:</span> <span class="nx">path</span> <span class="p">},</span>
-        <span class="s2">&#34;D:propstat&#34;</span><span class="o">:</span> <span class="p">{</span>
-          <span class="s2">&#34;D:prop&#34;</span><span class="o">:</span> <span class="nx">prop</span><span class="p">,</span>
-          <span class="s2">&#34;D:status&#34;</span><span class="o">:</span> <span class="s2">&#34;HTTP/1.1 200 OK&#34;</span><span class="p">,</span>
-        <span class="p">},</span>
-      <span class="p">},</span>
-    <span class="p">});</span>
-
-  <span class="c1">// Add a response for the root collection&#39;s properties
-</span><span class="c1"></span>  <span class="c1">// You can look up properties themselves in the WebDAV spec:
-</span><span class="c1"></span>  <span class="c1">// http://www.webdav.org/specs/rfc4918.html#dav.properties
-</span><span class="c1"></span>  <span class="nx">add</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="s2">&#34;D:creationdate&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
-    <span class="s2">&#34;D:getlastmodified&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
-    <span class="s2">&#34;D:resourcetype&#34;</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&#34;D:collection&#34;</span><span class="o">:</span> <span class="s2">&#34;&#34;</span> <span class="p">},</span>
-  <span class="p">});</span>
-
-  <span class="c1">// Add a response for the file&#39;s properties
-</span><span class="c1"></span>  <span class="nx">add</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="p">{</span>
-    <span class="s2">&#34;D:getcontentlength&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
-    <span class="s2">&#34;D:creationdate&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
-    <span class="s2">&#34;D:getlastmodified&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
-    <span class="s2">&#34;D:resourcetype&#34;</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="c1">// empty for non-collection resources
-</span><span class="c1"></span>  <span class="p">});</span>
-
-  <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">207</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">end</span><span class="p">({</span> <span class="nx">pretty</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}));</span>
-<span class="p">});</span>
-
-<span class="c1">// Respond to an OPTIONS request with the permitted verbs
-</span><span class="c1">// for the root collection, and a DAV compliance class.
-</span><span class="c1">// This tells clients that it&#39;s a WebDAV resource.
-</span><span class="c1"></span><span class="nx">app</span><span class="p">.</span><span class="nx">options</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
-    <span class="nx">Allow</span><span class="o">:</span> <span class="s2">&#34;OPTIONS,PROPFIND&#34;</span><span class="p">,</span>
-    <span class="nx">DAV</span><span class="o">:</span> <span class="s2">&#34;1&#34;</span><span class="p">,</span>
-  <span class="p">});</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
-<span class="p">});</span>
-
-<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">1900</span><span class="p">);</span>
-</code></pre></div><p>Since it&rsquo;s a toy I&rsquo;ve left some things unimplemented, including authentication, but it&rsquo;s a complete working example that I&rsquo;ve tested in several WebDAV clients. (Authentication into a WebDAV server is assumed by macOS, so Finder will prompt you for a username and password if you connect to it. You can fill in any value.)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&#34;express&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">xml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&#34;xmlbuilder&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Describes a mock file for our toy server
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">file</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">path</span><span class="o">:</span> <span class="s2">&#34;/hello-world.txt&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">content</span><span class="o">:</span> <span class="s2">&#34;Hello World&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">ctime</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Serve the file itself (standard get request)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">content</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Obtain properties for the root resource,
+</span></span></span><span class="line"><span class="cl"><span class="c1">// which is a collection containing our file
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">app</span><span class="p">.</span><span class="nx">propfind</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">res</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&#34;Content-Type&#34;</span><span class="p">,</span> <span class="s2">&#34;application/xml&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Begin a multistatus XML document to represent
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// PROPFIND responses from multiple resources
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">const</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">xml</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&#34;D:multistatus&#34;</span><span class="p">).</span><span class="nx">att</span><span class="p">(</span><span class="s2">&#34;xmlns:D&#34;</span><span class="p">,</span> <span class="s2">&#34;DAV:&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Helper method for adding new a response to the doc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kr">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">prop</span><span class="p">)</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">doc</span><span class="p">.</span><span class="nx">ele</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;D:response&#34;</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;D:href&#34;</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&#34;#text&#34;</span><span class="o">:</span> <span class="nx">path</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;D:propstat&#34;</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;D:prop&#34;</span><span class="o">:</span> <span class="nx">prop</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;D:status&#34;</span><span class="o">:</span> <span class="s2">&#34;HTTP/1.1 200 OK&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Add a response for the root collection&#39;s properties
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// You can look up properties themselves in the WebDAV spec:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// http://www.webdav.org/specs/rfc4918.html#dav.properties
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">add</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:creationdate&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:getlastmodified&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:resourcetype&#34;</span><span class="o">:</span> <span class="p">{</span> <span class="s2">&#34;D:collection&#34;</span><span class="o">:</span> <span class="s2">&#34;&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Add a response for the file&#39;s properties
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nx">add</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">path</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:getcontentlength&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:creationdate&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:getlastmodified&#34;</span><span class="o">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">ctime</span><span class="p">.</span><span class="nx">toUTCString</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;D:resourcetype&#34;</span><span class="o">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="c1">// empty for non-collection resources
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">207</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">end</span><span class="p">({</span> <span class="nx">pretty</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}));</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Respond to an OPTIONS request with the permitted verbs
+</span></span></span><span class="line"><span class="cl"><span class="c1">// for the root collection, and a DAV compliance class.
+</span></span></span><span class="line"><span class="cl"><span class="c1">// This tells clients that it&#39;s a WebDAV resource.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">app</span><span class="p">.</span><span class="nx">options</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">res</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Allow</span><span class="o">:</span> <span class="s2">&#34;OPTIONS,PROPFIND&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">DAV</span><span class="o">:</span> <span class="s2">&#34;1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">1900</span><span class="p">);</span>
+</span></span></code></pre></div><p>Since it&rsquo;s a toy I&rsquo;ve left some things unimplemented, including authentication, but it&rsquo;s a complete working example that I&rsquo;ve tested in several WebDAV clients. (Authentication into a WebDAV server is assumed by macOS, so Finder will prompt you for a username and password if you connect to it. You can fill in any value.)</p>
 <h2 id="0-1-infinity" class="Heading">
   0, 1, infinity
   <a href="#0-1-infinity" class="Heading__link" aria-hidden="true">#</a>
@@ -219,6 +242,7 @@
 <p>I experimented with chunked transfer encoding (too slow, I suppose due to overhead from stitching files back together in an intermediary buffer) and forced Content-Range responses (which goes against the spec, so I didn&rsquo;t really expect it to work), but couldn&rsquo;t find a workaround.</p>
 <p>I took this as my cue to stop monkeying about with WebDAV, but I was surprised how much fun I&rsquo;d been having. It&rsquo;s a unique application of HTTP and one I hadn&rsquo;t previously considered.</p>
 ]]></content>
+        
       </entry>
     
   
@@ -229,7 +253,8 @@
         <id>https://redopop.com/posts/proxying-in-the-shell/</id>
         <updated>2020-01-03T18:42:02-06:00</updated>
         <published>2020-01-03T18:42:02-06:00</published>
-        <content type="html"><![CDATA[<p>A handy thing about microservice architectures is how easily you can inspect &amp; override server-to-server API responses in local development. For example, updating your app for a planned-but-unimplemented API change.</p>
+        
+          <content type="html"><![CDATA[<p>A handy thing about microservice architectures is how easily you can inspect &amp; override server-to-server API responses in local development. For example, updating your app for a planned-but-unimplemented API change.</p>
 <p><a href="https://www.charlesproxy.com/" rel="external">Charles Proxy</a> is particularly helpful here. We use Charles a lot in front-end development and debugging, so I&rsquo;ll assume you&rsquo;re already familiar with features like <a href="https://www.charlesproxy.com/documentation/proxying/breakpoints/" rel="external">Breakpoints</a> and <a href="https://www.charlesproxy.com/documentation/tools/map-local/" rel="external">Map Local</a> to intercept and rewrite requests &amp; responses. However, there are a couple of snags unique to the command line environment which can be a stumbling block when you&rsquo;re trying to apply the same approach to server-side development.</p>
 <p>Don&rsquo;t be put off! It&rsquo;s easy when you know how. 😄</p>
 <h2 id="using-an-http-proxy-on-the-command-line" class="Heading">
@@ -237,8 +262,8 @@
   <a href="#using-an-http-proxy-on-the-command-line" class="Heading__link" aria-hidden="true">#</a>
 </h2><p>macOS proxy settings (set through Charles or via Network Preferences) are automatically applied to GUI applications – including most browsers – but they don&rsquo;t extend to the command line.</p>
 <p>By convention that&rsquo;s remedied via the <code>http_proxy</code>/<code>https_proxy</code> environment variables, which can point to the Charles HTTP Proxy in familiar <code>scheme://[userinfo@]host[:port]</code> URI syntax, i.e. for most of us:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span><span class="s2">&#34;http://127.0.0.1:8888&#34;</span>
-</code></pre></div><p>Applications that honor these variables then use the specified proxy when making HTTP/HTTPS requests. If you find it tedious to configure each time, Derek Morgan had the idea of <a href="https://dmorgan.info/posts/mac-network-proxy-terminal/" rel="external">using scutil output to set the variable automatically based on macOS proxy settings.</a> I don&rsquo;t do this, in part because of a problem Node makes:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span><span class="s2">&#34;http://127.0.0.1:8888&#34;</span>
+</span></span></code></pre></div><p>Applications that honor these variables then use the specified proxy when making HTTP/HTTPS requests. If you find it tedious to configure each time, Derek Morgan had the idea of <a href="https://dmorgan.info/posts/mac-network-proxy-terminal/" rel="external">using scutil output to set the variable automatically based on macOS proxy settings.</a> I don&rsquo;t do this, in part because of a problem Node makes:</p>
 <h3 id="nodes-proxy-got-cha" class="Heading">
   Node&rsquo;s proxy Got-cha
   <a href="#nodes-proxy-got-cha" class="Heading__link" aria-hidden="true">#</a>
@@ -250,12 +275,13 @@
   <a href="#using-self-signed-certificates-on-the-command-line" class="Heading__link" aria-hidden="true">#</a>
 </h2><p>Command line applications also don&rsquo;t know about the certificates installed &amp; trusted in the macOS System Keychain. They need to be configured into awareness of <a href="https://www.charlesproxy.com/documentation/proxying/ssl-proxying/" rel="external">the Charles root certificate,</a> otherwise proxied HTTPS requests will fail.</p>
 <p>Ruby uses OpenSSL, which has an environment variable <code>SSL_CERT_FILE</code> for this purpose. That variable can point to the exported Charles root certificate <em>(Help &gt; SSL Proxying &gt; Save Charles Root Certificate…)</em> when starting Rails:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">env <span class="nv">SSL_CERT_FILE</span><span class="o">=</span><span class="s2">&#34;/path/to/cert.pem&#34;</span> rails s
-</code></pre></div><p>Be aware: this configuration <em>replaces</em> the OpenSSL default, which will be a problem if the application makes HTTPS requests to hosts outside of Charles' configured SSL Proxying locations. This hasn&rsquo;t been an issue for me, but it&rsquo;s possible to <a href="https://www.jvt.me/posts/2019/12/04/openssl-certs-dir-setup/" rel="external">configure a directory of multiple certificates</a> to mix the default cert in.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">env <span class="nv">SSL_CERT_FILE</span><span class="o">=</span><span class="s2">&#34;/path/to/cert.pem&#34;</span> rails s
+</span></span></code></pre></div><p>Be aware: this configuration <em>replaces</em> the OpenSSL default, which will be a problem if the application makes HTTPS requests to hosts outside of Charles&rsquo; configured SSL Proxying locations. This hasn&rsquo;t been an issue for me, but it&rsquo;s possible to <a href="https://www.jvt.me/posts/2019/12/04/openssl-certs-dir-setup/" rel="external">configure a directory of multiple certificates</a> to mix the default cert in.</p>
 <p>Node makes this a little easier with an environment variable that&rsquo;s specifically designed to take <em>additional</em> certificates instead of an override:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">env <span class="nv">NODE_EXTRA_CA_CERTS</span><span class="o">=</span><span class="s2">&#34;/path/to/cert.pem&#34;</span> npm start
-</code></pre></div><p>With these configurations in place, we can treat microservice APIs in Node &amp; Rails just like we would in client applications. It&rsquo;s a handy tool for debugging and rapid development.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">env <span class="nv">NODE_EXTRA_CA_CERTS</span><span class="o">=</span><span class="s2">&#34;/path/to/cert.pem&#34;</span> npm start
+</span></span></code></pre></div><p>With these configurations in place, we can treat microservice APIs in Node &amp; Rails just like we would in client applications. It&rsquo;s a handy tool for debugging and rapid development.</p>
 ]]></content>
+        
       </entry>
     
   
