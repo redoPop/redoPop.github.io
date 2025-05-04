@@ -8,12 +8,6 @@
   <id>https://redopop.com/</id>
   <link rel="self" type="application/atom+xml" href="https://redopop.com/feed.atom" />
   
-    <author>
-      <name>Joe Bartlett</name>
-      <email>joe@redopop.com</email>
-      <uri>https://redopop.com/</uri>
-    </author>
-  
     
       <entry>
         <title>How hls.js estimates bandwidth</title>
